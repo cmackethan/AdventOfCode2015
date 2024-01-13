@@ -4,7 +4,6 @@ import time
 def solve(file):
     return
 
-
 start_time = time.time()
 file = open(sys.argv[1], 'r')
 print(solve(file))
