@@ -1,7 +1,7 @@
 import sys
 import time
 
-def preProcess(file) -> list[str]:
+def oldPassword(file) -> list[str]:
     p: list[str] = []
     s = file.readlines()[0]
     for c in s:
@@ -29,7 +29,7 @@ def passwordIsValid(p: list[str]) -> bool:
             return True
     return False
     
-def nextPassword(s: list[str]) -> list[str]:
+def incrementPassword(s: list[str]) -> list[str]:
     i = len(s) - 1
     while i >= 0 and s[i] == 'z':
         s[i] = 'a'
@@ -39,17 +39,15 @@ def nextPassword(s: list[str]) -> list[str]:
         s[i] = chr(ord(s[i]) + 1)
     return s
 
-def solveOne(p: list[str]) -> list[str]:
+def nextValidPassword(p: list[str]) -> list[str]:
     while not passwordIsValid(p):
-        p = nextPassword(p)
+        p = incrementPassword(p)
     return p
 
 def solve(file):
-    p = preProcess(file)
-    p = solveOne(p)
-    p1 = ''.join(p)
-    p = nextPassword(p)
-    p2 = ''.join(solveOne(p))
+    p = oldPassword(file)
+    p1 = ''.join(nextValidPassword(p))
+    p2 = ''.join(nextValidPassword(incrementPassword(p)))
     return p1 + '\n' + p2
 
 start_time = time.time()
