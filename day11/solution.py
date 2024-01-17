@@ -11,7 +11,7 @@ def hasSequence(we_know: bool, p: list[str], i: int) -> bool:
     return i + 2 < len(p) and ord(p[i]) == ord(p[i + 1]) - 1 \
                           and ord(p[i + 1]) == ord(p[i + 2]) - 1
 
-def hasTwoPairs(we_know: bool, firstPair: str, p: list[str], i: int) -> (bool, str):
+def hasUniquePairs(we_know: bool, firstPair: str, p: list[str], i: int) -> (bool, str):
     if we_know: return (True, '')
     if ((i + 2 < len(p) and p[i] == p[i + 1] and p[i + 1] != p[i + 2]) \
            or (i + 1 == len(p) - 1 and p[i] == p[i + 1])) \
@@ -25,7 +25,7 @@ def passwordIsValid(p: list[str]) -> bool:
     first_pair: str = ''
     for i in range(len(p)):
         conds[0] = hasSequence(conds[0], p, i)
-        (conds[1], first_pair) = hasTwoPairs(conds[1], first_pair, p, i)
+        (conds[1], first_pair) = hasUniquePairs(conds[1], first_pair, p, i)
         if all(conds): return True
     return False
     
