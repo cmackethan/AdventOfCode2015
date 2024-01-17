@@ -6,23 +6,27 @@ def oldPassword(file) -> list[str]:
     s = file.readlines()[0]
     return [c for c in s]
 
-def passwordIsValid(p: list[str]) -> bool:
-    cond1: bool = False
-    cond2: bool = False
-    firstPair: str = ''
-    for i in range(len(p)):
-        if not cond1 and i + 2 < len(p) and ord(p[i]) == ord(p[i + 1]) - 1 \
-           and ord(p[i + 1]) == ord(p[i + 2]) - 1:
-            cond1 = True
-        if not cond2 and ((i + 2 < len(p) and p[i] == p[i + 1] and p[i + 1] != p[i + 2]) \
+def hasSequence(we_know: bool, p: list[str], i: int) -> bool:
+    if we_know: return True
+    return i + 2 < len(p) and ord(p[i]) == ord(p[i + 1]) - 1 \
+                          and ord(p[i + 1]) == ord(p[i + 2]) - 1
+
+def hasTwoPairs(we_know: bool, firstPair: str, p: list[str], i: int) -> (bool, str):
+    if we_know: return (True, '')
+    if ((i + 2 < len(p) and p[i] == p[i + 1] and p[i + 1] != p[i + 2]) \
            or (i + 1 == len(p) - 1 and p[i] == p[i + 1])) \
            and p[i:i+1] != firstPair:
-            if firstPair != '':
-                cond2 = True
-            else:
-                firstPair = p[i] + p[i + 1]
-        if cond1 and cond2:
-            return True
+        if firstPair == '': return (False, p[i] + p[i + 1])
+        else: return (True, '')
+    return (False, firstPair)
+
+def passwordIsValid(p: list[str]) -> bool:
+    conds: list[bool] = [False] * 2
+    first_pair: str = ''
+    for i in range(len(p)):
+        conds[0] = hasSequence(conds[0], p, i)
+        (conds[1], first_pair) = hasTwoPairs(conds[1], first_pair, p, i)
+        if all(conds): return True
     return False
     
 def incrementPassword(s: list[str]) -> list[str]:
