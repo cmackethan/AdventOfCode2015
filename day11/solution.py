@@ -3,7 +3,7 @@ import time
 
 def oldPassword(file) -> list[str]:
     p: list[str] = []
-    s = file.readlines()[0]
+    s = file.readline()
     return [c for c in s]
 
 def hasSequence(we_know: bool, p: list[str], i: int) -> bool:
