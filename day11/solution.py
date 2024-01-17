@@ -12,7 +12,7 @@ def passwordIsValid(p: list[str]) -> bool:
     firstPair: str = ''
     for i in range(len(p)):
         if not cond1 and i + 2 < len(p) and ord(p[i]) == ord(p[i + 1]) - 1 \
-                                        and ord(p[i + 1]) == ord(p[i + 2]) - 1:
+           and ord(p[i + 1]) == ord(p[i + 2]) - 1:
             cond1 = True
         if not cond2 and ((i + 2 < len(p) and p[i] == p[i + 1] and p[i + 1] != p[i + 2]) \
            or (i + 1 == len(p) - 1 and p[i] == p[i + 1])) \
