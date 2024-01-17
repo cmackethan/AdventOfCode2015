@@ -4,11 +4,7 @@ import time
 def oldPassword(file) -> list[str]:
     p: list[str] = []
     s = file.readlines()[0]
-    for c in s:
-        if c == 'i' or c == 'o' or c == 'l':
-            c = chr(ord(c) + 1)
-        p.append(c)
-    return p
+    return [c for c in s]
 
 def passwordIsValid(p: list[str]) -> bool:
     cond1: bool = False
