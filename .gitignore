@@ -1,6 +1,6 @@
 input*
 testinput*
-output.txt
+output*
 .DS_Store
 *.code-workspace
 .vscode
