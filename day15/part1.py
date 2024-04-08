@@ -1,61 +1,46 @@
 import sys
 import time
-
-num_ingredients: int = 100
+import itertools
 
 class Ingredient:
-    def __init__(self, name: str, capacity: int, durability: int, flavor: int, texture: int, calories: int):
-        self.name = name
-        self.capacity = capacity
-        self.durability = durability
-        self.flavor = flavor
-        self.texture = texture
-        self.calories = calories
+    def __init__(self, line: str):
+        line = line.strip().split()
+        self.name = line[0].split(':')[0]
+        self.capacity = line[2].split(',')[0]
+        self.durability = line[4].split(',')[0]
+        self.flavor = line[6].split(',')[0]
+        self.texture = line[8].split(',')[0]
+        self.calories = line[10]
     
     def toString(self) -> str:
         return 'name: ' + self.name + ', capacity: ' + self.capacity \
             + ', durability: ' + self.durability + ', flavor: ' + self.flavor \
             + ', texture: ' + self.texture + ', calories: ' + self.calories
+
+class IngredientCalculator:
+    def __init__(self, N: int, file):
+        self.N = N
+        self.ingredients: list[Ingredient] = [Ingredient(line) for line in file]
+
+    def calculateScore(self, combination: tuple[int]) -> int:
+        capacity: int = 0; durability: int = 0; flavor: int = 0; texture: int = 0
+        for i, num in enumerate(combination):
+            ingredient = self.ingredients[i]
+            capacity += num * int(ingredient.capacity)
+            durability += num * int(ingredient.durability)
+            flavor += num * int(ingredient.flavor)
+            texture += num * int(ingredient.texture)
+        return max(0, capacity) * max(0, durability) * max(0, flavor) * max(0, texture)
     
-def calculate_score(combinations: list[(int, Ingredient)]) -> int:
-    capacity: int = 0
-    durability: int = 0
-    flavor: int = 0
-    texture: int = 0
-    for (num, ingredient) in combinations:
-        capacity += num * int(ingredient.capacity)
-        durability += num * int(ingredient.durability)
-        flavor += num * int(ingredient.flavor)
-        texture += num * int(ingredient.texture)
-    return capacity * durability * flavor * texture
+    def getHighScore(self) -> int:
+        high_score: int = 0
+        for combo in itertools.product(range(self.N + 1), repeat=len(self.ingredients)):
+            if sum(combo) == 100:
+                high_score = max(high_score, self.calculateScore(combo))
+        return high_score
 
 def solve(file):
-    ingredients: list[Ingredient] = list()
-    for line in file:
-        line = line.strip().split()
-        ingredients.append(Ingredient(
-            line[0].split(':')[0],
-            line[2].split(',')[0],
-            line[4].split(',')[0],
-            line[6].split(',')[0],
-            line[8].split(',')[0],
-            line[10]
-        ))
-    # ignore combinations with scores <= 0
-    # if we brute force things, it gets exponentially worse
-    # brute forcing for now...
-    # TODO: figure out how to enumerate all possible combinations
-        # for combo in combinations:
-            # this_score = calculate_score(combinations)
-            # if max_score < this_score:
-                # max_score = this_score
-        # return max_score
-    # this is a buckets and balls problem
-    combinations: list[(int, Ingredient)] = list()
-    combinations.append((44, ingredients[0]))
-    combinations.append((56, ingredients[1]))
-    return calculate_score(combinations)
-
+    return IngredientCalculator(100, file).getHighScore()
 
 start_time = time.time()
 file = open(sys.argv[1], 'r')
