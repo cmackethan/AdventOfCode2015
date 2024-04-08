@@ -33,13 +33,13 @@ class IngredientCalculator:
             calories += num * int(ingredient.calories)
         if calories != 500:
             return 0
-        return max(0, capacity) * max(0, durability) * max(0, flavor) * max(0, texture)
+        return max(capacity, 0) * max(durability, 0) * max(flavor, 0) * max(texture, 0)
     
     def getHighScore(self) -> int:
         high_score: int = 0
         for combo in itertools.product(range(self.N + 1), repeat=len(self.ingredients)):
             if sum(combo) == 100:
-                high_score = max(high_score, self.calculateScore(combo))
+                high_score = max(self.calculateScore(combo), high_score)
         return high_score
 
 def solve(file):
